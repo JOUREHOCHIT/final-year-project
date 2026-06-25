@@ -1,0 +1,84 @@
+{
+  "name": "Unsatisfiable rover scenario with a tight horizon",
+  "horizon": {
+    "start": 0,
+    "end": 12
+  },
+  "options": {
+    "objective": "makespan",
+    "timeout_ms": 5000
+  },
+  "daylight_windows": [
+    {
+      "start": 0,
+      "end": 12
+    }
+  ],
+  "tasks": [
+    {
+      "id": "move",
+      "label": "Move",
+      "type": "move",
+      "duration": {
+        "min": 5,
+        "max": 10
+      },
+      "energy_delta": -18
+    },
+    {
+      "id": "image",
+      "label": "Image",
+      "type": "image",
+      "duration": {
+        "min": 2,
+        "max": 4
+      },
+      "energy_delta": -5,
+      "requires_daylight": true
+    },
+    {
+      "id": "analyze",
+      "label": "Analyze",
+      "type": "analyze",
+      "duration": {
+        "min": 3,
+        "max": 6
+      },
+      "energy_delta": -10
+    },
+    {
+      "id": "recharge",
+      "label": "Recharge",
+      "type": "recharge",
+      "duration": {
+        "min": 10,
+        "max": 20
+      },
+      "energy_delta": 40,
+      "requires_daylight": true
+    }
+  ],
+  "dependencies": [
+    {
+      "before": "move",
+      "after": "image"
+    },
+    {
+      "before": "image",
+      "after": "analyze"
+    }
+  ],
+  "battery": {
+    "enabled": true,
+    "initial": 45,
+    "capacity": 100,
+    "minimum": 10,
+    "order": [
+      "move",
+      "image",
+      "analyze",
+      "recharge"
+    ],
+    "enforce_order": true
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "name": "Medium rover planning scenario",
+  "horizon": {
+    "start": 0,
+    "end": 60
+  },
+  "options": {
+    "objective": "makespan",
+    "timeout_ms": 5000
+  },
+  "daylight_windows": [
+    {
+      "start": 0,
+      "end": 45
+    }
+  ],
+  "tasks": [
+    {
+      "id": "move_site_a",
+      "label": "Move to A",
+      "type": "move",
+      "duration": {
+        "min": 5,
+        "max": 10
+      },
+      "energy_delta": -18
+    },
+    {
+      "id": "image_site_a",
+      "label": "Image A",
+      "type": "image",
+      "duration": {
+        "min": 2,
+        "max": 4
+      },
+      "energy_delta": -5,
+      "requires_daylight": true
+    },
+    {
+      "id": "analyze_site_a",
+      "label": "Analyze A",
+      "type": "analyze",
+      "duration": {
+        "min": 3,
+        "max": 6
+      },
+      "energy_delta": -12
+    },
+    {
+      "id": "recharge_midday",
+      "label": "Recharge",
+      "type": "recharge",
+      "duration": {
+        "min": 10,
+        "max": 20
+      },
+      "energy_delta": 35,
+      "requires_daylight": true
+    },
+    {
+      "id": "move_site_b",
+      "label": "Move to B",
+      "type": "move",
+      "duration": {
+        "min": 5,
+        "max": 10
+      },
+      "energy_delta": -16
+    },
+    {
+      "id": "image_site_b",
+      "label": "Image B",
+      "type": "image",
+      "duration": {
+        "min": 2,
+        "max": 4
+      },
+      "energy_delta": -5,
+      "requires_daylight": true
+    },
+    {
+      "id": "analyze_site_b",
+      "label": "Analyze B",
+      "type": "analyze",
+      "duration": {
+        "min": 3,
+        "max": 6
+      },
+      "energy_delta": -12
+    }
+  ],
+  "dependencies": [
+    {
+      "before": "move_site_a",
+      "after": "image_site_a"
+    },
+    {
+      "before": "image_site_a",
+      "after": "analyze_site_a"
+    },
+    {
+      "before": "analyze_site_a",
+      "after": "recharge_midday"
+    },
+    {
+      "before": "recharge_midday",
+      "after": "move_site_b"
+    },
+    {
+      "before": "move_site_b",
+      "after": "image_site_b"
+    },
+    {
+      "before": "image_site_b",
+      "after": "analyze_site_b"
+    }
+  ],
+  "battery": {
+    "enabled": true,
+    "initial": 65,
+    "capacity": 100,
+    "minimum": 10,
+    "order": [
+      "move_site_a",
+      "image_site_a",
+      "analyze_site_a",
+      "recharge_midday",
+      "move_site_b",
+      "image_site_b",
+      "analyze_site_b"
+    ],
+    "enforce_order": true
+  }
+}
